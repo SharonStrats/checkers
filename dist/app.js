@@ -4,6 +4,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var Game_1 = __importDefault(require("./models/Game"));
+var gameController_1 = __importDefault(require("./controllers/gameController"));
 var player1 = {
     id: 1,
     name: 'Sharon'
@@ -14,5 +15,7 @@ var player2 = {
 };
 var boardState = [];
 var checkerState = [];
+var board = gameController_1.default({ rows: 8, cols: 8 }, 2, 12);
+console.log(board);
 var checkerBoard = new Game_1.default({ rows: 8, cols: 8 }, [player1, player2], boardState, checkerState);
 console.log(checkerBoard);

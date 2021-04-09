@@ -8,7 +8,7 @@ Object.freeze({
   BACKWARD: 'backward'
 });
 
-export interface Position {
+export type Position = {
   row: number,
   col: number
 }

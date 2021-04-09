@@ -1,23 +1,56 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.initializeGame = void 0;
-var defaultOptions_1 = require("../config/defaultOptions");
-var initializeHelpers_1 = require("../helpers/initializeHelpers");
-var initializeGame = function (game) {
-    var boardState = [];
-    var alternateRow = false;
-    var player = game.players[0].id;
-    var checkerCount = 0;
-    for (var row = 1; row < game.board.rows; row++) {
-        boardState = initializeHelpers_1.initializeRow(boardState, row, player, game.board.cols, alternateRow);
-        checkerCount = checkerCount + (game.board.cols / defaultOptions_1.NUM_OF_PLAYERS); // places checkers on 1/2 the squares
-        if (checkerCount === defaultOptions_1.CHECKERS_PER_PLAYER) {
-            for (var i = 0; i < defaultOptions_1.NUM_OF_BLANK_ROWS; i++) {
-                boardState = initializeHelpers_1.initializeRow(boardState, row, 0, game.board.cols, alternateRow);
-            }
-            // need to adjust this to handle more than 2 players
-            player = game.players[1].id;
+var _createPosition = function (row, col) {
+    return { row: row, col: col };
+};
+var _numOfRowsToSkip = function () {
+    return 2;
+};
+var _nextBoardPosition = function (boardDimensions, curCheckerPosition, skipRows) {
+    var newCol = curCheckerPosition.col;
+    var newRow = curCheckerPosition.row;
+    if (skipRows) {
+        newRow += _numOfRowsToSkip();
+    }
+    newCol += 2;
+    if (newCol >= boardDimensions.cols) {
+        newRow++;
+        if (newRow % 2 === 0) { // even row
+            newCol = 0;
+        }
+        else { // odd row
+            newCol = 1;
         }
     }
+    return { row: newRow, col: newCol };
 };
-exports.initializeGame = initializeGame;
+var _buildChecker = function (playerId, position, direction) {
+    return { playerId: playerId, position: position, direction: direction };
+};
+var initializeBoard = function (boardDimensions, numOfPlayers, numOfCheckersPerPlayer) {
+    var board = [];
+    var numOfCheckers = numOfPlayers * numOfCheckersPerPlayer;
+    var checker;
+    var row = 0;
+    var col = 0;
+    var checkerPosition = { row: row, col: col };
+    var skipRows = false;
+    var direction = 'forward';
+    var player = 1;
+    for (var i = 0; i < numOfCheckers; i++) {
+        checker = _buildChecker(player, checkerPosition, direction);
+        if (i === numOfCheckersPerPlayer - 1) {
+            skipRows = true;
+            checkerPosition = _nextBoardPosition(boardDimensions, checkerPosition, skipRows);
+            skipRows = false;
+            player++;
+            direction = 'backward';
+        }
+        else {
+            checkerPosition = _nextBoardPosition(boardDimensions, checkerPosition, skipRows);
+        }
+        board[i] = checker;
+    }
+    return board;
+};
+exports.default = initializeBoard;
