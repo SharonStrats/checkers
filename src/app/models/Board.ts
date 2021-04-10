@@ -18,6 +18,12 @@ export class Board {
     this.board = this.initializeBoard(boardDimensions, numOfPlayers, numOfCheckersPerPlayer);
   }
 
+  get size() { return {rows: this.board.length, cols: this.board[0].length}; }
+
+  public getCellValue(row: number, col: number) {
+    return this.board[row][col];
+  }
+
   private initializeBoard(boardDimensions: BoardOptions = BOARD_DEFAULT, numOfPlayers: number = NUM_OF_PLAYERS, numOfCheckersPerPlayer: number = CHECKERS_PER_PLAYER): BoardCell[][] | null[][] {
     let newBoard: BoardCell[][] | null[][] =[];
     let playerId: number = 1;
@@ -31,11 +37,10 @@ export class Board {
     for (let row = 0; row < boardDimensions.rows; row++) {
       let newRow = this.createBoardRow(boardDimensions, row, playerId, checkerId, checkersInEachRow, skipRow);
       newBoard[row] = newRow;
-      console.log("new Row 1 " + newRow);
       if (!skipRow) {
         checkerId += checkersInEachRow;
       }
-      if (checkerId === numOfCheckersPerPlayer + 1) {
+      if ((checkerId === numOfCheckersPerPlayer + 1) && !skipRow) {
         playerId++;
         skipRow = true;
       } 

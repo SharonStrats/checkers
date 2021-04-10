@@ -17,4 +17,3 @@ let checkerState: CheckerState[] = [];
 
 let checkerBoard = new Game({ rows: 8, cols: 8}, [ player1, player2], boardState, checkerState)
 console.log(JSON.stringify(checkerBoard.board));
-console.log(JSON.stringify(checkerBoard.boardState));

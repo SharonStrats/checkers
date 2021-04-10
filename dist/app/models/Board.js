@@ -11,6 +11,14 @@ var Board = /** @class */ (function () {
         this.board = [];
         this.board = this.initializeBoard(boardDimensions, numOfPlayers, numOfCheckersPerPlayer);
     }
+    Object.defineProperty(Board.prototype, "size", {
+        get: function () { return { rows: this.board.length, cols: this.board[0].length }; },
+        enumerable: false,
+        configurable: true
+    });
+    Board.prototype.getCellValue = function (row, col) {
+        return this.board[row][col];
+    };
     Board.prototype.initializeBoard = function (boardDimensions, numOfPlayers, numOfCheckersPerPlayer) {
         if (boardDimensions === void 0) { boardDimensions = defaultOptions_1.BOARD_DEFAULT; }
         if (numOfPlayers === void 0) { numOfPlayers = defaultOptions_1.NUM_OF_PLAYERS; }
@@ -26,11 +34,10 @@ var Board = /** @class */ (function () {
         for (var row = 0; row < boardDimensions.rows; row++) {
             var newRow = this.createBoardRow(boardDimensions, row, playerId, checkerId, checkersInEachRow, skipRow);
             newBoard[row] = newRow;
-            console.log("new Row 1 " + newRow);
             if (!skipRow) {
                 checkerId += checkersInEachRow;
             }
-            if (checkerId === numOfCheckersPerPlayer + 1) {
+            if ((checkerId === numOfCheckersPerPlayer + 1) && !skipRow) {
                 playerId++;
                 skipRow = true;
             }
