@@ -1,9 +1,8 @@
 import { Player } from './Player';
-import { Board, BoardOptions, BoardCell } from './Board';
+import { Board, BoardOptions } from './Board';
 import { BOARD_DEFAULT, NUM_OF_PLAYERS, CHECKERS_PER_PLAYER } from '../config/defaultOptions';
-import { numOfRowsToSkip } from '../helpers/initializationHelper';
 
-Object.freeze({
+export const Direction = Object.freeze({
   FORWORD: 'forward',
   BACKWARD: 'backward'
 });
@@ -14,6 +13,7 @@ export type Position = {
 }
 
 export interface Checker {
+  checkerId: number,
   playerId: number,
   position: Position,
   direction: string
@@ -25,17 +25,19 @@ export interface CheckerState {
 }
 
 export class Game {
-  board:  Board;
-  players: Player[];
-  boardState: Map<number, Checker>;
-  checkerState: CheckerState[];
+  private _board:  Board;
+  private _players: Player[];
+  private _boardState: Map<number, Checker>;
+  private _checkerState: Map<number, CheckerState>;
 
-  constructor(boardDimensions: BoardOptions = BOARD_DEFAULT, players: Player[], boardState: Checker[], checkerState: CheckerState[],  numOfCheckersPerPlayer: number = CHECKERS_PER_PLAYER ) {
-    this.board = new Board(boardDimensions, NUM_OF_PLAYERS, CHECKERS_PER_PLAYER);
-    this.players = players;
-    this.boardState = this.initializeBoardState();
-    this.checkerState = checkerState;
+  constructor(boardDimensions: BoardOptions = BOARD_DEFAULT, players: Player[], numOfCheckersPerPlayer: number = CHECKERS_PER_PLAYER ) {
+    this._board = new Board(boardDimensions, players.length, numOfCheckersPerPlayer);
+    this._players = players;
+    this._boardState = this.initializeBoardState();
+    this._checkerState = new Map();
   }
+
+  get board() { return this._board; } 
 
   private initializeBoardState(): Map<number, Checker> {
     let checkerPosition: Position;
@@ -47,7 +49,7 @@ export class Game {
         let cell = this.board.getCellValue(row, col);
         if (cell) {
           checkerPosition = { row, col };
-          checker = this.buildChecker(cell.playerId, checkerPosition);
+          checker = this.buildChecker(cell.checkerId, cell.playerId, checkerPosition);
           console.log(cell.checkerId);
           console.log(JSON.stringify(checker));
           boardState.set(cell.checkerId, checker);
@@ -57,15 +59,15 @@ export class Game {
     return boardState;
   }
   
-  private buildChecker = (playerId: number, position: Position) => {
+  private buildChecker = (checkerId: number, playerId: number, position: Position) => {
     let direction: string;
-
+    // this could be done much better
     if (playerId === 1) {
-      direction = 'forward';
+      direction = Direction.FORWORD;
     } else {
-      direction = 'backward';
+      direction = Direction.BACKWARD;
     }
-    return { playerId, position, direction };
+    return { checkerId, playerId, position, direction };
   }
 }
 export default Game;

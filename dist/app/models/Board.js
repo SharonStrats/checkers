@@ -19,6 +19,11 @@ var Board = /** @class */ (function () {
     Board.prototype.getCellValue = function (row, col) {
         return this.board[row][col];
     };
+    Board.prototype.setCellValue = function (row, col, newValue) {
+        // check for any problems if no problems return success
+        this.board[row][col] = newValue;
+        return "Success";
+    };
     Board.prototype.initializeBoard = function (boardDimensions, numOfPlayers, numOfCheckersPerPlayer) {
         if (boardDimensions === void 0) { boardDimensions = defaultOptions_1.BOARD_DEFAULT; }
         if (numOfPlayers === void 0) { numOfPlayers = defaultOptions_1.NUM_OF_PLAYERS; }

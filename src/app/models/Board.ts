@@ -1,5 +1,8 @@
 import { BOARD_DEFAULT, CHECKERS_PER_PLAYER, NUM_OF_PLAYERS } from '../config/defaultOptions';
+import { BoardError } from '../enums/Error';
+import { Status } from '../enums/Status';
 import { numOfRowsToSkip } from '../helpers/initializationHelper';
+
 
 export interface BoardOptions {
   rows: number;
@@ -11,17 +14,32 @@ export type BoardCell = {
   checkerId: number
 }
 
+// BOARD DECISIONS: I thought about putting a string 'empty' for a spot the player
+//                  could move, but this made the data structure a bit too much
+//                  probably a better way, but I decided to go with a BoardCell
+//                  with playerId: 0 and checkerId: 0 to represent an empty location
 export class Board {
-  board: BoardCell[][] | null[][] = [];
+  private _board: BoardCell[][] | null[][]= [];
 
   constructor(boardDimensions: BoardOptions = BOARD_DEFAULT, numOfPlayers: number = NUM_OF_PLAYERS, numOfCheckersPerPlayer: number = CHECKERS_PER_PLAYER)  {
-    this.board = this.initializeBoard(boardDimensions, numOfPlayers, numOfCheckersPerPlayer);
+    this._board = this.initializeBoard(boardDimensions, numOfPlayers, numOfCheckersPerPlayer);
   }
 
-  get size() { return {rows: this.board.length, cols: this.board[0].length}; }
+  get size() { return {rows: this._board.length, cols: this._board[0].length}; }
 
   public getCellValue(row: number, col: number) {
-    return this.board[row][col];
+    if (this._board[row][col] === null) {
+       throw new Error(BoardError.SpaceNotValid);
+    }
+    return this._board[row][col];
+  }
+
+  public setCellValue(row: number, col: number, newValue: BoardCell | null) {
+    if (this._board[row][col] === null) {
+      throw new Error(BoardError.SpaceNotValid);
+    }
+    this._board[row][col] = newValue;
+    return Status.SUCCESS;
   }
 
   private initializeBoard(boardDimensions: BoardOptions = BOARD_DEFAULT, numOfPlayers: number = NUM_OF_PLAYERS, numOfCheckersPerPlayer: number = CHECKERS_PER_PLAYER): BoardCell[][] | null[][] {
@@ -55,7 +73,7 @@ export class Board {
 
   private createBoardRow(boardDimensions: BoardOptions, row:number, playerId: number, checkerId: number, checkersInEachRow: number, skipRow: boolean) {
     let newRow: BoardCell[] | null[] = [];
-    let boardCell: BoardCell = { playerId, checkerId };
+    let boardCell:BoardCell | string = (!skipRow) ? { playerId, checkerId } : { playerId: 0, checkerId: 0 };
 
     for (let col = 0; col < boardDimensions.cols; col++) {
       if (((row%2 === 0 && col%2 !== 0) || (row%2 !== 0 && col%2 === 0 )) && !skipRow) { // even row odd cols || odd row even cols
