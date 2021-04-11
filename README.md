@@ -15,4 +15,4 @@ Backend of Checkers Game written in NodeJS.
 - Tests:                   Almost done, but would do more
 - Comments:                Would do more, although notes about decisions are there
 - CI:                      Modified name of a file and it is causing issues in CI not
-                           not caused when ran locally.
+                           caused when ran locally.
