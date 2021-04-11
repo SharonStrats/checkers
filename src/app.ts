@@ -1,7 +1,8 @@
 import Game from "./app/models/Game";
 import { Player } from './app/models/Player';
-import { Checker, CheckerState, Position } from './app/models/Game';
 import { GameController } from './app/controllers/GameController';
+import { Checker, CheckerState } from './app/models/Checker';
+import { Position } from './app/models/Position';
 
 let player1: Player = {
   id: 1,

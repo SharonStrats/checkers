@@ -2,7 +2,7 @@ import { Game } from "../models/Game";
 import { BoardCell } from '../models/Board';
 import { Checker } from '../models/Checker';
 import { Position } from '../models/Position';
-import { GameControlError } from '../enums/Error';
+import { BoardError, GameControlError } from '../enums/Error';
 import { Direction } from '../enums/Direction';
 import { Status } from "../enums/Status";
 //import { Move } from '../enums/Move';
@@ -20,32 +20,32 @@ export class GameController {
     this.game = game;
   }
 
+  // Note: I changed my mind about throwing errors, but going 
+  // to still use the error enum would refactor later.
   public move(checkerToMove: Checker, positionTo: Position) {
-    try {
-      if (this.spaceOccupied(positionTo)) {
-        throw new Error(GameControlError.SpaceOccupied);
-      }
-    } catch (error)  {
-      throw new Error(error);
-    }
+ 
+    const spaceOccupied = this.spaceOccupied(positionTo); 
 
+    if (spaceOccupied) {
+      return spaceOccupied;
+    }
     if (!this.forwardMoveForPlayer(checkerToMove, positionTo)) {
-      throw new Error(GameControlError.NotForward);
+      return GameControlError.NotForward;
     }
     if (this.spacesToMove(checkerToMove, positionTo) > 1) {
-      throw new Error(GameControlError.NotOneSpace);
+      return GameControlError.NotOneSpace;
     }
 
-    return this.processMove(checkerToMove, positionTo);
-
+      return this.processMove(checkerToMove, positionTo);
   }
 
   private spaceOccupied(position: Position) {
-    try {
-      return this.game.board.getCellValue(position.row, position.col);
-    } catch (error) {
-      throw new Error(error);
+
+    let cell: BoardCell | null = this.game.board.getCellValue(position.row, position.col);
+    if (cell) {
+      return (cell.playerId !== 0) ? GameControlError.SpaceOccupied : false;
     }
+    return BoardError.SpaceNotValid;
   }
 
   private forwardMoveForPlayer(checker: Checker, positionTo: Position): boolean {

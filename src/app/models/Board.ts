@@ -28,15 +28,18 @@ export class Board {
   get size() { return {rows: this._board.length, cols: this._board[0].length}; }
 
   public getCellValue(row: number, col: number) {
-    if (this._board[row][col] === null) {
-       throw new Error(BoardError.SpaceNotValid);
-    }
+    //if (this._board[row][col] === null) {
+       // first had it throwing an error, but decided to return
+       // an error string instead, this broke the initialization
+       // ... just taking it out now but would refactor later
+       //return BoardError.SpaceNotValid;
+    //}
     return this._board[row][col];
   }
 
   public setCellValue(row: number, col: number, newValue: BoardCell | null) {
     if (this._board[row][col] === null) {
-      throw new Error(BoardError.SpaceNotValid);
+      return Status.FAIL; // this could be better... more specific..
     }
     this._board[row][col] = newValue;
     return Status.SUCCESS;
@@ -47,7 +50,7 @@ export class Board {
     let playerId: number = 1;
     let checkerId: number = 1;
     let skipRow = false;
-    let rowsToSkip = numOfRowsToSkip();
+    let rowsToSkip = numOfRowsToSkip(boardDimensions, numOfPlayers, numOfCheckersPerPlayer);
     const checkersInEachRow = 4; // need to calculate this.
 
     // if row is odd, marker should be place on even cols
@@ -76,13 +79,16 @@ export class Board {
     let boardCell:BoardCell | string = (!skipRow) ? { playerId, checkerId } : { playerId: 0, checkerId: 0 };
 
     for (let col = 0; col < boardDimensions.cols; col++) {
-      if (((row%2 === 0 && col%2 !== 0) || (row%2 !== 0 && col%2 === 0 )) && !skipRow) { // even row odd cols || odd row even cols
-      newRow[col] = boardCell;
+      if ((row%2 === 0 && col%2 !== 0) || (row%2 !== 0 && col%2 === 0 )) { // even row odd cols || odd row even cols
+        newRow[col] = boardCell;
         checkerId++;
+        if (!skipRow) {
+          boardCell = this.buildBoardCell(playerId, checkerId);
+        }
       } else {
         newRow[col] = null;
       }
-      boardCell = this.buildBoardCell(playerId, checkerId);
+      
     }
 
     return newRow;

@@ -1,9 +1,10 @@
 import { Player } from './Player';
-import { Board, BoardOptions } from './Board';
+import { Board, BoardCell, BoardOptions } from './Board';
 import { BOARD_DEFAULT, NUM_OF_PLAYERS, CHECKERS_PER_PLAYER } from '../config/defaultOptions';
 import { Direction } from '../enums/Direction';
 import { Checker, CheckerState } from './Checker';
 import { Position } from './Position';
+import { BoardError } from '../enums/Error';
 
 /* Game
 *   board
@@ -37,15 +38,14 @@ export class Game {
     let checkerPosition: Position;
     let boardState: Map<number, Checker> = new Map();
     let checker: Checker;
+    let cell: BoardCell | null ;
 
     for (let row = 0; row < this.board.size.rows; row++) {
       for (let col = 0; col < this.board.size.cols; col++) {
-        let cell = this.board.getCellValue(row, col);
+        cell = this.board.getCellValue(row, col);
         if (cell) {
           checkerPosition = { row, col };
           checker = this.buildChecker(cell.checkerId, cell.playerId, checkerPosition);
-          console.log(cell.checkerId);
-          console.log(JSON.stringify(checker));
           boardState.set(cell.checkerId, checker);
         }
       }

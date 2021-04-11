@@ -1,6 +1,8 @@
-// can use the Dimensions and number of checkers for each player to 
+import { BoardOptions } from "../models/Board";
+
 // calculate
-export const numOfRowsToSkip = () => {
-  
-  return 2;
+export const numOfRowsToSkip = (boardDimensions: BoardOptions, numOfPlayers: number, numOfCheckersPerPlayer: number) => {
+  const numberOfCheckersPerRow: number = boardDimensions.cols/2;
+  const totalNumberOfCheckersToPlace: number = numOfPlayers * numOfCheckersPerPlayer;
+  return boardDimensions.rows - (totalNumberOfCheckersToPlace/numberOfCheckersPerRow);
 }

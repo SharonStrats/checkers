@@ -2,15 +2,42 @@ import { BOARD_DEFAULT } from "../../app/config/defaultOptions";
 import { BoardError } from "../../app/enums/Error";
 import { Board, BoardCell } from "../../app/models/Board";
 
-// TODO: TEST PRIVATE FUNCTIONS AND MAKE THE BOARD SNAPSHOT
 describe('Board', () => {
   const boardDimensions = BOARD_DEFAULT;
-  const sizeResult = { rows: 8, cols: 8 }
+  const sizeResult = { rows: 8, cols: 8 };
+  const board = new Board();
+  const emptyCell: BoardCell = { playerId: 0, checkerId: 0};
  
-  test.skip('Returns a Board', () => {
-    // create a snapshot
-    expect(new Board(boardDimensions)).toBe('Board');
-  })
+  test('Returns a Board', () => {
+    //expect(board).toMatchObject(Board);
+  });
+
+  test('Invalid cells row 0', () => {
+    expect(board.getCellValue(0,0)).toBe(null);
+    expect(board.getCellValue(0,2)).toBe(null);
+    expect(board.getCellValue(0,4)).toBe(null);
+    expect(board.getCellValue(0,6)).toBe(null);
+  });
+
+  test('Invalid cells row 1', () => {
+    expect(board.getCellValue(1,1)).toBe(null);
+    expect(board.getCellValue(1,3)).toBe(null);
+    expect(board.getCellValue(1,5)).toBe(null);
+    expect(board.getCellValue(1,7)).toBe(null);
+  });
+
+  test('Empty cells row 3', () => {
+    expect(board.getCellValue(3,0)).toEqual(emptyCell);
+    expect(board.getCellValue(3,2)).toEqual(emptyCell);
+    expect(board.getCellValue(3,4)).toEqual(emptyCell);
+    expect(board.getCellValue(3,6)).toEqual(emptyCell);
+  });
+  test('Empty cells row 4', () => {
+    expect(board.getCellValue(4,1)).toEqual(emptyCell);
+    expect(board.getCellValue(4,3)).toEqual(emptyCell);
+    expect(board.getCellValue(4,5)).toEqual(emptyCell);
+    expect(board.getCellValue(4,7)).toEqual(emptyCell);
+  });
   describe('getter size' , () => {
     const boardDimensions = BOARD_DEFAULT;
     const sizeResult = { rows: 8, cols: 8 }
