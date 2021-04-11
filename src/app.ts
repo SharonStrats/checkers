@@ -22,6 +22,6 @@ let position:Position = { row: 3, col: 2};
 let checker: Checker | undefined = checkerBoard.boardState.get(1);
 if (checker) {
   let moveStatus = game.move(checker,position);
-  console.log(moveStatus);
+  //console.log(moveStatus);
 }
-console.log(JSON.stringify(checkerBoard.board));
+//console.log(JSON.stringify(checkerBoard.board));
