@@ -15,7 +15,7 @@ var player2 = {
 };
 var boardState = [];
 var checkerState = [];
-var checkerBoard = new Game_1.default({ rows: 8, cols: 8 }, [player1, player2], boardState, checkerState);
+var checkerBoard = new Game_1.default({ rows: 8, cols: 8 }, [player1, player2]);
 console.log(JSON.stringify(checkerBoard.board));
 var game = new GameController_1.GameController(checkerBoard);
 var position = { row: 3, col: 2 };

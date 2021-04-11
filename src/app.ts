@@ -17,7 +17,6 @@ let boardState: Checker[] = [];
 let checkerState: CheckerState[] = [];
 
 let checkerBoard = new Game({ rows: 8, cols: 8}, [ player1, player2])
-console.log(JSON.stringify(checkerBoard.board));
 let game = new GameController(checkerBoard);
 let position:Position = { row: 3, col: 2};
 let checker: Checker | undefined = checkerBoard.boardState.get(1);

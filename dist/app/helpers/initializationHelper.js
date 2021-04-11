@@ -1,9 +1,10 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.numOfRowsToSkip = void 0;
-// can use the Dimensions and number of checkers for each player to 
 // calculate
-var numOfRowsToSkip = function () {
-    return 2;
+var numOfRowsToSkip = function (boardDimensions, numOfPlayers, numOfCheckersPerPlayer) {
+    var numberOfCheckersPerRow = boardDimensions.cols / 2;
+    var totalNumberOfCheckersToPlace = numOfPlayers * numOfCheckersPerPlayer;
+    return boardDimensions.rows - (totalNumberOfCheckersToPlace / numberOfCheckersPerRow);
 };
 exports.numOfRowsToSkip = numOfRowsToSkip;
