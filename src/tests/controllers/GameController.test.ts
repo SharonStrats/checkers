@@ -93,6 +93,65 @@ describe('GameController', () => {
       }
       expect(game.move(checker,position)).toBe(GameControlError.NotForward);
     });
+    // TODO: need to adjust so that spot is free
+    test.skip('Should return not one space - more rows (forward moving piece)', () => {
+      const players = [ player1, player2 ];
+      let checkerBoard = new Game(boardDimensions, [ player1, player2])
+      let game = new GameController(checkerBoard);
+
+      let position:Position = { row: 6, col: 1};
+      let checker: Checker = {
+        checkerId: 1,
+        playerId: 1,
+        position: { row: 2, col: 1 },
+        direction: Direction.FORWORD
+      }
+      expect(game.move(checker,position)).toBe(GameControlError.NotOneSpace);
+    });
+    // TODO: need to adjust so that spot is free
+    test.skip('Should return not one space - row (backward moving piece)', () => {
+      const players = [ player1, player2 ];
+      let checkerBoard = new Game(boardDimensions, [ player1, player2])
+      let game = new GameController(checkerBoard);
+      
+      let position:Position = { row: 2, col: 1};
+      let checker: Checker = {
+        checkerId: 1,
+        playerId: 1,
+        position: { row: 6, col: 1 },
+        direction: Direction.BACKWARD
+      }
+      expect(game.move(checker,position)).toBe(GameControlError.NotOneSpace);
+    });
+    test('Should return not one space - more cols (forward moving piece)', () => {
+      const players = [ player1, player2 ];
+      let checkerBoard = new Game(boardDimensions, [ player1, player2])
+      let game = new GameController(checkerBoard);
+
+      let position:Position = { row: 4, col: 3};
+      let checker: Checker = {
+        checkerId: 1,
+        playerId: 1,
+        position: { row: 3, col: 0 },
+        direction: Direction.FORWORD
+      }
+      expect(game.move(checker,position)).toBe(GameControlError.NotOneSpace);
+    });
+
+    test('Should return not one space - more cols (backward moving piece)', () => {
+      const players = [ player1, player2 ];
+      let checkerBoard = new Game(boardDimensions, [ player1, player2])
+      let game = new GameController(checkerBoard);
+      
+      let position:Position = { row: 4, col: 5};
+      let checker: Checker = {
+        checkerId: 1,
+        playerId: 1,
+        position: { row: 5, col: 2 },
+        direction: Direction.BACKWARD
+      }
+      expect(game.move(checker,position)).toBe(GameControlError.NotOneSpace);
+    });
   });
 
 });

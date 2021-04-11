@@ -32,7 +32,7 @@ export class GameController {
     if (!this.forwardMoveForPlayer(checkerToMove, positionTo)) {
       return GameControlError.NotForward;
     }
-    if (this.spacesToMove(checkerToMove, positionTo) > 1) {
+    if (this.moreThanOneSpace(checkerToMove, positionTo)) {
       return GameControlError.NotOneSpace;
     }
 
@@ -57,8 +57,14 @@ export class GameController {
   }
 
   // need to finish implementing
-  private spacesToMove(checker: Checker, positionTo: Position) {
-    return 1;
+  private moreThanOneSpace(checker: Checker, positionTo: Position) {
+    // using abs to account for both forward and backward moving players
+    const numOfRowsToMove = Math.abs(positionTo.row - checker.position.row);  
+    const numOfColsToMove = Math.abs( positionTo.col - checker.position.col) 
+    if (numOfRowsToMove > 2 || numOfColsToMove > 1) {
+      return GameControlError.NotOneSpace;
+    }
+    return false;
   }
 
   private processMove(checker: Checker, positionTo: Position) {
