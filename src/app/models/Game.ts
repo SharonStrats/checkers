@@ -1,29 +1,20 @@
 import { Player } from './Player';
 import { Board, BoardOptions } from './Board';
 import { BOARD_DEFAULT, NUM_OF_PLAYERS, CHECKERS_PER_PLAYER } from '../config/defaultOptions';
+import { Direction } from '../enums/Direction';
+import { Checker, CheckerState } from './Checker';
+import { Position } from './Position';
 
-export const Direction = Object.freeze({
-  FORWORD: 'forward',
-  BACKWARD: 'backward'
-});
-
-export type Position = {
-  row: number,
-  col: number
-}
-
-export interface Checker {
-  checkerId: number,
-  playerId: number,
-  position: Position,
-  direction: string
-}
-
-export interface CheckerState {
-  pieceId: number,
-  kinged: boolean
-}
-
+/* Game
+*   board
+*   players
+*   boardState
+*   checkerState
+*   Initializes a Game of Checkers, the default is an 8 * 8 board with 2 players.
+*   Notes: Decided to use Maps for boardState for quick look up
+*          Did the same for checkerState, not only for quick look up, but no need
+*          to store all the checkers, only need to store the ones that are kinged.
+*/
 export class Game {
   private _board:  Board;
   private _players: Player[];
@@ -38,6 +29,9 @@ export class Game {
   }
 
   get board() { return this._board; } 
+  get players() { return this._players; } 
+  get boardState() { return this._boardState; } 
+  get checkerState() { return this._checkerState; } 
 
   private initializeBoardState(): Map<number, Checker> {
     let checkerPosition: Position;

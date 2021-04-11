@@ -1,14 +1,18 @@
-import { Game, Position, Direction, Checker } from "../models/Game";
+import { Game } from "../models/Game";
 import { BoardCell } from '../models/Board';
+import { Checker } from '../models/Checker';
+import { Position } from '../models/Position';
 import { GameControlError } from '../enums/Error';
+import { Direction } from '../enums/Direction';
+import { Status } from "../enums/Status";
+//import { Move } from '../enums/Move';
+// Note: should put index.ts file in enums, would be cleaner and then import all from 
+//       same place instead of so many imports.
 
-
-let Move = Object.freeze({
-  Forward: 'forward',
-  Diagonal: 'diagonal',
-  Backward: 'backward'   // only if king
- });
-
+/*  GameController
+*     game: Game
+*     Takes a Game and Wraps it in a controller in order to perform the game. 
+*/
 export class GameController {
   private game: Game;
 
@@ -16,7 +20,7 @@ export class GameController {
     this.game = game;
   }
 
-  move(checkerToMove: Checker, positionTo: Position) {
+  public move(checkerToMove: Checker, positionTo: Position) {
     try {
       if (this.spaceOccupied(positionTo)) {
         throw new Error(GameControlError.SpaceOccupied);
@@ -62,7 +66,7 @@ export class GameController {
     let moveStatus: string;
 
     moveStatus = this.game.board.setCellValue(checker.position.row, checker.position.col, null);
-    if (moveStatus === "Success") {
+    if (moveStatus === Status.SUCCESS) {
       moveStatus = this.game.board.setCellValue(positionTo.row, positionTo.col, cell);
     }
     return moveStatus;
